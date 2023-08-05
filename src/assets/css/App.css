@@ -8,10 +8,11 @@
 .Title {
     color: #2e83d8;
     font-size: 70px;
+    text-align: center;
 }
 
 .Beta {
-    margin: 5px 0px 10px 0px;
+    text-align: center;
 }
 
 .GitHub {

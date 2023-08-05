@@ -19,6 +19,9 @@ const WeatherWidget = ({ data, daysAheadToPredict }) => {
         <div className="Days">
             {
                 averagedForecasts.map((forecast, i) => {
+                    if (Object.keys(forecast).length < 1) {
+                        return;
+                    }
                     return (
                         <div className="Weekdays" key={i}>
                             <h2>{WeekDays[(today + i) % 7]}</h2>
@@ -32,9 +35,9 @@ const WeatherWidget = ({ data, daysAheadToPredict }) => {
                                                 <p>{list[1]["t"]} °C</p>
                                                 <p>{list[1]["ws"]} ({list[1]["gust"]})</p>
                                                 <div className="WindDirection">
-                                                {list[1]["wd"].map((element, k) => {
-                                                    return <img width="30px" key={k} src={arrowSVG} style={{transform: `rotate(${element + 180}deg)`, transformOrigin: "center"}}></img>
-                                                })}
+                                                    {list[1]["wd"].map((element, k) => {
+                                                        return <img width="30px" key={k} src={arrowSVG} style={{ transform: `rotate(${element + 180}deg)`, transformOrigin: "center" }}></img>
+                                                    })}
                                                 </div>
                                             </div>
                                         )
@@ -83,13 +86,18 @@ const GetAverageForecast = (forecast) => {
         // Kväll
         const kv = Object.entries(element).filter(list => parseInt(list[0]) >= 16 && parseInt(list[0]) <= 19);
 
-        averagedForecast[i] = {
-            fm: GetAverageWeather(fm),
-            em: GetAverageWeather(em),
-            kv: GetAverageWeather(kv)
+        averagedForecast[i] = {};
+
+        if (fm.length > 0) {
+            averagedForecast[i]["fm"] = GetAverageWeather(fm);
+        }
+        if (em.length > 0) {
+            averagedForecast[i]["em"] = GetAverageWeather(em);
+        }
+        if (kv.length > 0) {
+            averagedForecast[i]["kv"] = GetAverageWeather(kv);
         }
     })
-
     return averagedForecast;
 }
 
@@ -140,6 +148,5 @@ const GetSailingWeatherParameters = (list) => {
                 break;
         }
     })
-
     return data;
 }

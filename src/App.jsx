@@ -22,7 +22,7 @@ function App() {
 
     return (
         <div className="App">
-            <a className="GitHub" target="_blank" rel="noopener noreferrer" href="https://github.com/williamtorberntsson/sailingweather">Visit my GitHub to contribute!</a>
+            <a className="GitHub" target="_blank" rel="noopener noreferrer" href="https://github.com/williamtorberntsson/sailingweather">Visit my GitHub to contribute or give ideas!</a>
             <h2 className="Beta">Currently in Beta!</h2>
             <button className="UpdateButton" onClick={updateSMHIdata}>Klicka för att uppdatera!</button>
             <h1 className="Title">Vädret på Roxen!</h1>
