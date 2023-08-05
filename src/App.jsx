@@ -25,7 +25,7 @@ function App() {
             <a className="GitHub" target="_blank" rel="noopener noreferrer" href="https://github.com/williamtorberntsson/roxenweather">Visit my GitHub to contribute!</a>
             <h2 className="Beta">Currently in Beta!</h2>
             <button className="UpdateButton" onClick={updateSMHIdata}>Klicka för att uppdatera!</button>
-            <h1 className="Title">Vädret i Roxen!</h1>
+            <h1 className="Title">Vädret på Roxen!</h1>
             <WeatherWidget data={smhiData} daysAheadToPredict={3} />
         </div>
     );

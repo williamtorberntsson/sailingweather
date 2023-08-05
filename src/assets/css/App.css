@@ -22,6 +22,6 @@
 .UpdateButton {
     padding: 20px;
     font-size: 20px;
-    border: none;
     background-color: #559dca;
+    border-radius: 17px;
 }
