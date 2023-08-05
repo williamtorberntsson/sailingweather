@@ -1,0 +1,27 @@
+
+.App {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.Title {
+    color: #2e83d8;
+    font-size: 70px;
+}
+
+.Beta {
+    margin: 5px 0px 10px 0px;
+}
+
+.GitHub {
+    font-size: 20px;
+    color: black;
+}
+
+.UpdateButton {
+    padding: 20px;
+    font-size: 20px;
+    border: none;
+    background-color: #559dca;
+}

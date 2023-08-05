@@ -1,0 +1,16 @@
+@font-face {
+    font-family: "Lumanosimo";
+    src: local("Lumanosimo"),
+        url("./fonts/Lumanosimo/Lumanosimo-Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Permanent_Marker";
+    src: local("Permanent_Marker"),
+    url("./fonts/Permanent_Marker/PermanentMarker-Regular.ttf")
+}
+
+body {
+    background-color: #FEF0D8;
+    font-family: Permanent_Marker, sans-serif;
+}
