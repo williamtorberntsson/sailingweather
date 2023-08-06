@@ -58,8 +58,13 @@ const SortDataToDays = (data, daysToPredict) => {
     let forecast = [];
 
     data.timeSeries.map((element, i) => {
-        const date = new Date(element.validTime);
-        const daysAhead = GetDaysAhead(date.getDay());
+        const date = new Date(element.validTime); // This time in wrong time zone
+        const today = new Date();
+        if( i == 1) {
+            console.log(today.toISOString());
+            console.log(date.toISOString());
+        }
+        const daysAhead = GetDaysAhead(date);
 
         if (daysAhead <= daysToPredict && i < 60 /*to not get next week*/) {
             if (forecast.length < daysAhead + 1) {
@@ -104,12 +109,11 @@ const GetAverageForecast = (forecast) => {
 const GetDaysAhead = (day) => {
     // This only works if less than 7 days of data is used
     let today = new Date();
-    today = today.getDay();
 
     if (today <= day) {
-        return day - today;
+        return day.getDay() - today.getDay();
     } else {
-        return 7 - today + day;
+        return 7 - today.getDay() + day.getDay();
     }
 }
 
