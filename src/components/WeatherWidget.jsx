@@ -56,17 +56,16 @@ export default WeatherWidget;
 const SortDataToDays = (data, daysToPredict) => {
 
     let forecast = [];
+    let now = new Date();
 
-    data.timeSeries.map((element, i) => {
+    let onlyFutureData = data.timeSeries.filter(day => new Date(day.validTime) > now);
+
+    onlyFutureData.map((element, i) => {
         const date = new Date(element.validTime); // This time in wrong time zone
-        const today = new Date();
-        if( i == 1) {
-            console.log(today.toISOString());
-            console.log(date.toISOString());
-        }
-        const daysAhead = GetDaysAhead(date);
 
-        if (daysAhead <= daysToPredict && i < 60 /*to not get next week*/) {
+        const daysAhead = GetDaysAhead(now, date);
+
+        if (daysAhead <= daysToPredict) {
             if (forecast.length < daysAhead + 1) {
                 forecast.push({});
             }
@@ -106,15 +105,14 @@ const GetAverageForecast = (forecast) => {
     return averagedForecast;
 }
 
-const GetDaysAhead = (day) => {
-    // This only works if less than 7 days of data is used
-    let today = new Date();
+const GetDaysAhead = (start, end) => {
+    const oneDay = 1000 * 60 * 60 * 24;
 
-    if (today <= day) {
-        return day.getDay() - today.getDay();
-    } else {
-        return 7 - today.getDay() + day.getDay();
-    }
+    const diff = end.getTime() - start.getTime();
+
+    const daysDiff = Math.round(diff / oneDay);
+
+    return daysDiff;
 }
 
 const GetAverageWeather = (data) => {
