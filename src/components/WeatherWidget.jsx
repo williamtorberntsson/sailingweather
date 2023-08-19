@@ -1,5 +1,6 @@
 import { WeekDays } from "../constants";
 import "../assets/css/WeatherWidget.css";
+import WeatherIcon from "./WeatherIcon";
 import arrowSVG from "../assets/svg/arrow.svg";
 
 const WeatherWidget = ({ data, daysAheadToPredict }) => {
@@ -31,9 +32,15 @@ const WeatherWidget = ({ data, daysAheadToPredict }) => {
                                         let dayInterval = list[0];
                                         return (
                                             <div className="WeatherTypes" key={j}>
+
+                                                <WeatherIcon className="icon" index={list[1]["symbol"]} />
+
                                                 <h3>{dayInterval}</h3>
+
                                                 <p>{list[1]["t"]} °C</p>
+
                                                 <p>{list[1]["ws"]} ({list[1]["gust"]})</p>
+
                                                 <div className="WindDirection">
                                                     {list[1]["wd"].map((element, k) => {
                                                         return <img width="30px" key={k} src={arrowSVG} style={{ transform: `rotate(${element + 180}deg)`, transformOrigin: "center" }}></img>
@@ -69,7 +76,7 @@ const SortDataToDays = (data, daysToPredict) => {
             if (forecast.length < daysAhead + 1) {
                 forecast.push({});
             }
-            forecast[daysAhead][date.getHours()] = GetSailingWeatherParameters(element.parameters);
+            forecast[daysAhead][date.getHours()] = getSailingWeatherParameters(element.parameters);
         }
     });
     return forecast;
@@ -93,13 +100,13 @@ const GetAverageForecast = (forecast) => {
         averagedForecast[i] = {};
 
         if (fm.length > 0) {
-            averagedForecast[i]["fm"] = GetAverageWeather(fm);
+            averagedForecast[i]["fm"] = getAverageWeather(fm);
         }
         if (em.length > 0) {
-            averagedForecast[i]["em"] = GetAverageWeather(em);
+            averagedForecast[i]["em"] = getAverageWeather(em);
         }
         if (kv.length > 0) {
-            averagedForecast[i]["kv"] = GetAverageWeather(kv);
+            averagedForecast[i]["kv"] = getAverageWeather(kv);
         }
     })
     return averagedForecast;
@@ -115,23 +122,46 @@ const GetDaysAhead = (start, end) => {
     return daysDiff;
 }
 
-const GetAverageWeather = (data) => {
+const getAverageWeather = (data) => {
     let tempSum = 0;
     let windSum = 0;
     let gustSum = 0;
     let windDirection = new Array(data.length);
+    let weatherIconList = new Array(data.length);
 
     data.forEach((element, i) => {
         tempSum += element[1]["t"] / data.length;
         windSum += element[1]["ws"] / data.length;
         gustSum += element[1]["gust"] / data.length;
         windDirection[i] = element[1]["wd"];
+        weatherIconList[i] = element[1]["symbol"];
     })
 
-    return { t: tempSum.toFixed(1), ws: windSum.toFixed(1), gust: gustSum.toFixed(1), wd: windDirection }
+    return { t: tempSum.toFixed(1), ws: windSum.toFixed(1), gust: gustSum.toFixed(1), wd: windDirection, symbol: chooseWeatherIcon(weatherIconList) }
 }
 
-const GetSailingWeatherParameters = (list) => {
+const chooseWeatherIcon = (list) => {
+    
+    // prioritise thunder or thunderstorm
+    if (11 in list) {
+      return 11;
+    } else if(21 in list) { 
+      return 21;
+    }
+
+    let counts = list.reduce((a, c) => {
+        a[c] = (a[c] || 0) + 1;
+        return a;
+      }, {});
+      let maxCount = Math.max(...Object.values(counts));
+      let mostFrequent = Object.keys(counts).filter(k => counts[k] === maxCount);
+
+      mostFrequent = mostFrequent[0];
+      
+      return mostFrequent;
+}
+
+const getSailingWeatherParameters = (list) => {
     let data = {};
 
     list.forEach(param => {
@@ -146,6 +176,8 @@ const GetSailingWeatherParameters = (list) => {
                 data["ws"] = param.values[0];
             case "gust":
                 data["gust"] = param.values[0];
+            case "Wsymb2":
+                data["symbol"] = param.values[0];
             default:
                 break;
         }
