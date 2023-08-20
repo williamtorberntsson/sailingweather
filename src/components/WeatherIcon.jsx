@@ -33,6 +33,7 @@ const weatherIconList = [clearSky, nearlyClearSky, variableCloudness, halfClear,
     moderateSnowShower, heavySnowShower, lightRain, moderateRain, heavyRain, thunder,
     lightSleet, moderateSleet, heavySleet, lightSnowfall, moderateSnowfall, heavySnowfall];
 
-const WeatherIcon = ({index}) => <img className="weatherIcon" src={weatherIconList[index]} />
-
+const WeatherIcon = ({ index }) => {
+    return <img className="weatherIcon" src={weatherIconList[parseInt(index)-1]} />
+}
 export default WeatherIcon;
